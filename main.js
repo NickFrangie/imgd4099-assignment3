@@ -32,10 +32,15 @@ async function main() {
     Math.round(window.innerWidth / 8), 
     Math.round(window.innerHeight / 8), 
     1
-  ] 
+  ]
+  
+  for( let i = 0; i < size; i++ ) {
+    state[ i ] = Math.round( Math.random() )
+  }
+
   
   // Seagull
-  sg.buffers({ stateA:state, stateB:state })
+  sg.buffers({ stateA1:state, stateA2:state, stateB1:state, stateB2:state })
     .uniforms({ 
       resolution: [window.innerWidth, window.innerHeight],
       feed: params.feed,
@@ -48,7 +53,7 @@ async function main() {
     .compute(
       compute,
       workgroups,
-      { pingpong: ["stateA"] }
+      { pingpong: ["stateA1", "stateB1"] }
     )
     .render(render)
     .run();

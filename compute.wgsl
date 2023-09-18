@@ -3,8 +3,10 @@
 @group(0) @binding(2) var<uniform> kill: f32;
 @group(0) @binding(3) var<uniform> diffusionA: f32;
 @group(0) @binding(4) var<uniform> diffusionB: f32;
-@group(0) @binding(5) var<storage, read_write> statein: array<f32>;
-@group(0) @binding(6) var<storage, read_write> stateout: array<f32>;
+@group(0) @binding(5) var<storage, read_write> stateAin: array<f32>;
+@group(0) @binding(6) var<storage, read_write> stateAout: array<f32>;
+@group(0) @binding(7) var<storage, read_write> stateBin: array<f32>;
+@group(0) @binding(8) var<storage, read_write> stateBout: array<f32>;
 
 fn index( x:i32, y:i32 ) -> u32 {
   let _res = vec2i(res);
@@ -17,20 +19,20 @@ fn cs( @builtin(global_invocation_id) _cell:vec3u ) {
   let cell = vec3i(_cell);
 
   let i = index(cell.x, cell.y);
-  let activeNeighbors = statein[ index(cell.x + 1, cell.y + 1) ] +
-                        statein[ index(cell.x + 1, cell.y)      ] +
-                        statein[ index(cell.x + 1, cell.y - 1) ] +
-                        statein[ index(cell.x, cell.y - 1)      ] +
-                        statein[ index(cell.x - 1, cell.y - 1) ] +
-                        statein[ index(cell.x - 1, cell.y)      ] +
-                        statein[ index(cell.x - 1, cell.y + 1) ] +
-                        statein[ index(cell.x, cell.y + 1)      ];
+  let activeNeighbors = stateAin[ index(cell.x + 1, cell.y + 1) ] +
+                        stateAin[ index(cell.x + 1, cell.y)      ] +
+                        stateAin[ index(cell.x + 1, cell.y - 1) ] +
+                        stateAin[ index(cell.x, cell.y - 1)      ] +
+                        stateAin[ index(cell.x - 1, cell.y - 1) ] +
+                        stateAin[ index(cell.x - 1, cell.y)      ] +
+                        stateAin[ index(cell.x - 1, cell.y + 1) ] +
+                        stateAin[ index(cell.x, cell.y + 1)      ];
 
   if( activeNeighbors == 2.0 ) {
-    stateout[i] = statein[i];
+    stateAout[i] = stateAin[i];
   }else if( activeNeighbors == 3.) {
-    stateout[i] = 1.;
+    stateAout[i] = 1.;
   }else{
-    stateout[i] = 0.;
+    stateAout[i] = 0.;
   }
 }
