@@ -1,6 +1,10 @@
 @group(0) @binding(0) var<uniform> res: vec2f;
-@group(0) @binding(1) var<storage, read_write> statein: array<f32>;
-@group(0) @binding(2) var<storage, read_write> stateout: array<f32>;
+@group(0) @binding(1) var<uniform> feed: f32;
+@group(0) @binding(2) var<uniform> kill: f32;
+@group(0) @binding(3) var<uniform> diffusionA: f32;
+@group(0) @binding(4) var<uniform> diffusionB: f32;
+@group(0) @binding(5) var<storage, read_write> statein: array<f32>;
+@group(0) @binding(6) var<storage, read_write> stateout: array<f32>;
 
 fn index( x:i32, y:i32 ) -> u32 {
   let _res = vec2i(res);
