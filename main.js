@@ -1,33 +1,45 @@
 import { default as seagulls } from "./seagulls.js";
 import { Pane } from 'https://cdn.jsdelivr.net/npm/tweakpane@4.0.1/dist/tweakpane.min.js';
 
-async function main() {  
+const params = { feed: 0.055, kill: 0.062, diffusionA: 1.0, diffusionB: .5, timescale: 1 };
+let sg;
+
+// Setup
+function setup() {
   // Tweakpane
-  const params = { feed: 0.5, kill: 0.5, diffusionA: .75, diffusionB: .75}
   const pane = new Pane();
   pane
     .addBinding(params, 'feed', { min: 0, max: 1 })
-    .on('change',  e => { params.feed = e.value; })
+    .on('change',  e => { sg.uniforms.feed = e.value; });
   pane
     .addBinding(params, 'kill', { min: 0, max: 1 })
-    .on('change',  e => { sg.uniforms.kill = e.value; })
+    .on('change',  e => { sg.uniforms.kill = e.value; });
   pane
     .addBinding(params, 'diffusionA', { min: 0, max: 1 })
-    .on('change',  e => { sg.uniforms.diffusionA = e.value; })
+    .on('change',  e => { sg.uniforms.diffusionA = e.value; });
   pane
     .addBinding(params, 'diffusionB', { min: 0, max: 1 })
-    .on('change',  e => { sg.uniforms.diffusionB = e.value; })
-  
+    .on('change',  e => { sg.uniforms.diffusionB = e.value; });
+  // pane
+  //   .addBinding(params, 'timescale', { min: .8, max: 4 })
+  //   .on('change',  e => { sg.uniforms.timescale = e.value; });
+  pane
+    .addButton({ title: 'Reset' })
+    .on('click', main );
+}
+
+async function main() {    
   // Variables
-  const sg = await seagulls.init(),
-        frag = await seagulls.import("./frag.wgsl"),
+  sg = await seagulls.init();
+  const frag = await seagulls.import("./frag.wgsl"),
         compute = await seagulls.import("./compute.wgsl");
     
   const render = seagulls.constants.vertex + frag;
   
   const size = window.innerWidth * window.innerHeight,
-        state = new Float32Array(size);
-
+        stateA = new Float32Array(size),
+        stateB = new Float32Array(size);
+  
   const workgroups = [
     Math.round(window.innerWidth / 8), 
     Math.round(window.innerHeight / 8), 
@@ -35,18 +47,20 @@ async function main() {
   ]
   
   for( let i = 0; i < size; i++ ) {
-    state[ i ] = Math.round( Math.random() )
+    stateA[i] = Math.round(Math.random());
+    stateB[i] = Math.round(Math.random());
   }
 
   
   // Seagull
-  sg.buffers({ stateA1:state, stateA2:state, stateB1:state, stateB2:state })
+  sg.buffers({ stateA1:stateA, stateA2:stateA, stateB1:stateB, stateB2:stateB })
     .uniforms({ 
       resolution: [window.innerWidth, window.innerHeight],
       feed: params.feed,
       kill: params.kill,
       diffusionA: params.diffusionA,
-      diffusionB: params.diffusionB
+      diffusionB: params.diffusionB,
+      timescale: params.timescale
     })
     .backbuffer(false)
     .pingpong(1)
@@ -59,4 +73,5 @@ async function main() {
     .run();
 }
 
+setup();
 main();
