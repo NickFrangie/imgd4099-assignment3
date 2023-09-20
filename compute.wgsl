@@ -59,8 +59,10 @@ fn cs( @builtin(global_invocation_id) _cell:vec3u ) {
   // A
   let feed = leftFeed * (1 - xRatio) + rightFeed * xRatio;
   stateAout[i] = A + (((diffusionA * laplacianA(cell)) - (A * B * B) + (feed * (1 - A))) * timescale);
+  stateAout[i] = clamp(stateAout[i], 0, 1);
   
   // B
   let kill = leftKill * (1 - xRatio) + rightKill * xRatio;
   stateBout[i] =  B + (((diffusionB * laplacianB(cell)) + (A * B * B) - ((kill + feed) * B))  * timescale);
+  stateBout[i] = clamp(stateBout[i], 0, 1);
 }
