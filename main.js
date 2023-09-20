@@ -2,8 +2,10 @@ import { default as seagulls } from "./seagulls.js";
 import { Pane } from "https://cdn.jsdelivr.net/npm/tweakpane@4.0.1/dist/tweakpane.min.js";
 
 var params = {
-  feed: 0.2,
-  kill: 0.02,
+  leftFeed: 0.13,
+  rightFeed: 0.2,
+  leftKill: 0.02,
+  rightKill: 0.025,
   diffusionA: 1.0,
   diffusionB: 0.15,
   timescale: 1,
@@ -17,14 +19,24 @@ async function main() {
   // Tweakpane
   const pane = new Pane();
   pane
-    .addBinding(params, "feed", { min: 0, max: 1 })
+    .addBinding(params, "leftFeed", { min: 0, max: 1 })
     .on("change", (e) => {
-      params.feed = e.value;
+      params.leftFeed = e.value;
     });
   pane
-    .addBinding(params, "kill", { min: 0, max: 1 })
+    .addBinding(params, "rightFeed", { min: 0, max: 1 })
     .on("change", (e) => {
-      params.kill = e.value;
+      params.rightFeed = e.value;
+    });
+  pane
+    .addBinding(params, "leftKill", { min: 0, max: 1 })
+    .on("change", (e) => {
+      params.leftKill = e.value;
+    });
+  pane
+    .addBinding(params, "rightKill", { min: 0, max: 1 })
+    .on("change", (e) => {
+      params.rightKill = e.value;
     });
   pane
     .addBinding(params, "diffusionA", { min: 0, max: 1 })
@@ -82,15 +94,19 @@ async function main() {
     })
     .uniforms({
       resolution: [window.innerWidth, window.innerHeight],
-      feed: params.feed,
-      kill: params.kill,
+      leftFeed: params.leftFeed,
+      rightFeed: params.rightFeed,  
+      leftKill: params.leftKill,
+      rightKill: params.rightKill,
       diffusionA: params.diffusionA,
       diffusionB: params.diffusionB,
       timescale: params.timescale,
     })
     .onframe(() => {
-      sg.uniforms.feed = params.feed;
-      sg.uniforms.kill = params.kill;
+      sg.uniforms.leftFeed = params.leftFeed,
+      sg.uniforms.rightFeed = params.rightFeed,  
+      sg.uniforms.leftKill = params.leftKill,
+      sg.uniforms.rightKill = params.rightKill,
       sg.uniforms.diffusionA = params.diffusionA;
       sg.uniforms.diffusionB = params.diffusionB;
       // sg.uniforms.timescale = params.timescale;
