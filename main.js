@@ -4,7 +4,7 @@ import { Pane } from "https://cdn.jsdelivr.net/npm/tweakpane@4.0.1/dist/tweakpan
 var params = {
   leftFeed: 0.13,
   rightFeed: 0.2,
-  leftKill: 0.02,
+  leftKill: 0.03,
   rightKill: 0.025,
   diffusionA: 1.0,
   diffusionB: 0.15,
@@ -19,22 +19,22 @@ async function main() {
   // Tweakpane
   const pane = new Pane();
   pane
-    .addBinding(params, "leftFeed", { min: 0, max: 1 })
+    .addBinding(params, "leftFeed", { min: 0, max: .5 })
     .on("change", (e) => {
       params.leftFeed = e.value;
     });
   pane
-    .addBinding(params, "rightFeed", { min: 0, max: 1 })
+    .addBinding(params, "rightFeed", { min: 0, max: .5 })
     .on("change", (e) => {
       params.rightFeed = e.value;
     });
   pane
-    .addBinding(params, "leftKill", { min: 0, max: 1 })
+    .addBinding(params, "leftKill", { min: 0, max: .5 })
     .on("change", (e) => {
       params.leftKill = e.value;
     });
   pane
-    .addBinding(params, "rightKill", { min: 0, max: 1 })
+    .addBinding(params, "rightKill", { min: 0, max: .5 })
     .on("change", (e) => {
       params.rightKill = e.value;
     });
