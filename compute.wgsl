@@ -52,8 +52,8 @@ fn cs( @builtin(global_invocation_id) _cell:vec3u ) {
   let B : f32 = stateBin[i];
   
   // A
-  stateAout[i] = A + ((diffusionA * laplacianA(cell)) - (A * B * B) + (feed * (1 - A))) * timescale;
+  stateAout[i] = A + (((diffusionA * laplacianA(cell)) - (A * B * B) + (feed * (1 - A))) * timescale);
   
   // B
-  stateBout[i] =  B + ((diffusionB * laplacianB(cell)) + (A * B * B) - ((kill + feed) * B))  * timescale;
+  stateBout[i] =  B + (((diffusionB * laplacianB(cell)) + (A * B * B) - ((kill + feed) * B))  * timescale);
 }

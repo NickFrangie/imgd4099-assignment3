@@ -12,6 +12,11 @@ fn fs( @builtin(position) pos : vec4f ) -> @location(0) vec4f {
   let idx : u32 = u32( pos.y * res.x + pos.x );
   let a = stateA[idx];
   let b = stateB[idx];
-  let c = floor(a-b);
-  return vec4f(c,c,c, 1.);
+  
+  if (a >= b) {
+    return vec4f(1.);
+  }
+  else {
+    return vec4f(0., 0., 0., 1.);
+  }
 }
