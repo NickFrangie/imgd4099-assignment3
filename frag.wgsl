@@ -15,9 +15,5 @@ fn fs( @builtin(position) pos : vec4f ) -> @location(0) vec4f {
   let a = stateA[idx];
   let b = stateB[idx];
   
-  if (a >= b) {
-    return vec4f(1.);
-  } else {
-    return vec4f(0., 0., 0., 1.);
-  }
+  return vec4f(b,b,b,1.);
 }
