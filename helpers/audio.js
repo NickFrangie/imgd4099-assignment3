@@ -1,4 +1,4 @@
-const Audio = {
+ const Audio = {
   __hasInput: false,
   ctx: null,
   bins:null,
